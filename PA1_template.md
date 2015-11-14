@@ -208,8 +208,8 @@ summaryBy(steps ~ date, data = activity,
 
 ```r
 step_mean_Interval<-aggregate(formula = steps~interval, 
-           data = activity,
-           FUN = mean)
+                              data = activity,
+                              FUN = mean)
 colnames(step_mean_Interval)<-c('interval','Average_steps')
 ```
 
@@ -218,8 +218,8 @@ colnames(step_mean_Interval)<-c('interval','Average_steps')
 ```r
 library("lattice")
 xyplot(Average_steps~interval,
-data = step_mean_Interval,
-type = "l")
+       data = step_mean_Interval,
+       type = "l")
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-7-1.png) 
@@ -330,7 +330,7 @@ activity_no_missing_data<-steps_imputing
 ```r
 library(doBy)
 activity_no_missing_data_Daily<-summaryBy(steps_imputing ~ date, data = activity_no_missing_data, 
-          FUN = list(sum,mean,median))
+                                          FUN = list(sum,mean,median))
 activity_no_missing_data_Daily
 ```
 
@@ -482,8 +482,8 @@ head(activity_no_missing_data)
 
 ```r
 step_mean_weekday_weekend<-aggregate(formula = steps_imputing~interval+weekday_weekend_Flag, 
-           data = activity_no_missing_data,
-           FUN = mean)
+                                     data = activity_no_missing_data,
+                                     FUN = mean)
 colnames(step_mean_weekday_weekend)<-c('interval','weekday_weekend_Flag','Average_steps')
 ```
 
@@ -492,8 +492,8 @@ colnames(step_mean_weekday_weekend)<-c('interval','weekday_weekend_Flag','Averag
 ```r
 library("lattice")
 xyplot(Average_steps~interval|weekday_weekend_Flag,
-data = step_mean_weekday_weekend,
-type = "l")
+       data = step_mean_weekday_weekend,
+       type = "l")
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-19-1.png) 
