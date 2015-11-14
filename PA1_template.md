@@ -285,6 +285,17 @@ table(is.na(activity$interval))
 steps_imputing<-merge(activity,step_mean_Interval,by="interval")
 #Rename columns in table
 colnames(steps_imputing)<-c('interval','steps_RAW','date','steps_mean')
+head(steps_imputing)
+```
+
+```
+##   interval steps_RAW       date steps_mean
+## 1        0        NA 2012-10-01   1.716981
+## 2        0         0 2012-11-23   1.716981
+## 3        0         0 2012-10-28   1.716981
+## 4        0         0 2012-11-06   1.716981
+## 5        0         0 2012-11-24   1.716981
+## 6        0         0 2012-11-15   1.716981
 ```
 #### Replace missing steps with average steps and view first several rows
 

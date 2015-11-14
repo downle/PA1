@@ -1,8 +1,8 @@
 ---
 title: "Reproducible Research: Peer Assessment 1"
 output: 
-  html_document:
-    keep_md: true
+html_document:
+keep_md: true
 ---
 
 
@@ -54,8 +54,8 @@ summaryBy(steps ~ date, data = activity,
 ### Average number of steps taken of the 5-minute interval across all days
 ```{r echo=TRUE}
 step_mean_Interval<-aggregate(formula = steps~interval, 
-           data = activity,
-           FUN = mean)
+                              data = activity,
+                              FUN = mean)
 colnames(step_mean_Interval)<-c('interval','Average_steps')
 ```
 
@@ -63,8 +63,8 @@ colnames(step_mean_Interval)<-c('interval','Average_steps')
 ```{r echo=TRUE}
 library("lattice")
 xyplot(Average_steps~interval,
-data = step_mean_Interval,
-type = "l")
+       data = step_mean_Interval,
+       type = "l")
 ```
 
 ### Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
@@ -100,6 +100,7 @@ table(is.na(activity$interval))
 steps_imputing<-merge(activity,step_mean_Interval,by="interval")
 #Rename columns in table
 colnames(steps_imputing)<-c('interval','steps_RAW','date','steps_mean')
+head(steps_imputing)
 ```
 #### Replace missing steps with average steps and view first several rows
 ```{r echo=TRUE}
@@ -121,7 +122,7 @@ activity_no_missing_data<-steps_imputing
 ```{r echo=TRUE}
 library(doBy)
 activity_no_missing_data_Daily<-summaryBy(steps_imputing ~ date, data = activity_no_missing_data, 
-          FUN = list(sum,mean,median))
+                                          FUN = list(sum,mean,median))
 activity_no_missing_data_Daily
 ```
 
@@ -164,8 +165,8 @@ head(activity_no_missing_data)
 ### 5-minute interval and the average number of steps taken, averaged across all weekday days or weekend days
 ```{r echo=TRUE}
 step_mean_weekday_weekend<-aggregate(formula = steps_imputing~interval+weekday_weekend_Flag, 
-           data = activity_no_missing_data,
-           FUN = mean)
+                                     data = activity_no_missing_data,
+                                     FUN = mean)
 colnames(step_mean_weekday_weekend)<-c('interval','weekday_weekend_Flag','Average_steps')
 ```
 
@@ -173,6 +174,6 @@ colnames(step_mean_weekday_weekend)<-c('interval','weekday_weekend_Flag','Averag
 ```{r echo=TRUE}
 library("lattice")
 xyplot(Average_steps~interval|weekday_weekend_Flag,
-data = step_mean_weekday_weekend,
-type = "l")
+       data = step_mean_weekday_weekend,
+       type = "l")
 ```
