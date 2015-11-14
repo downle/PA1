@@ -16,7 +16,11 @@ activity <- read.csv("~/PA1_QIAN/activity.csv")
 ### Format date
 ```{r echo=TRUE}
 activity$date<-as.POSIXct(activity$date,format="%Y-%m-%d") 
-head(activity)
+
+library(xtable)
+
+print(xtable(head(activity)),type="html")
+
 ```
 
 ## What is mean total number of steps taken per day?
