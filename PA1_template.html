@@ -73,23 +73,14 @@ img {
 <div id="format-date" class="section level3">
 <h3>Format date</h3>
 <pre class="r"><code>activity$date&lt;-as.POSIXct(activity$date,format=&quot;%Y-%m-%d&quot;) 
-
-library(xtable)
-
-print(xtable(head(activity)),type=&quot;html&quot;)</code></pre>
-<pre><code>## Warning in formatC(x = structure(c(1349046000, 1349046000, 1349046000,
-## 1349046000, : class of 'x' was discarded</code></pre>
-<pre><code>## &lt;!-- html table generated in R 3.2.2 by xtable 1.8-0 package --&gt;
-## &lt;!-- Sat Nov 14 19:40:30 2015 --&gt;
-## &lt;table border=1&gt;
-## &lt;tr&gt; &lt;th&gt;  &lt;/th&gt; &lt;th&gt; steps &lt;/th&gt; &lt;th&gt; date &lt;/th&gt; &lt;th&gt; interval &lt;/th&gt;  &lt;/tr&gt;
-##   &lt;tr&gt; &lt;td align=&quot;right&quot;&gt; 1 &lt;/td&gt; &lt;td align=&quot;right&quot;&gt;  &lt;/td&gt; &lt;td align=&quot;right&quot;&gt; 1349046000.00 &lt;/td&gt; &lt;td align=&quot;right&quot;&gt;   0 &lt;/td&gt; &lt;/tr&gt;
-##   &lt;tr&gt; &lt;td align=&quot;right&quot;&gt; 2 &lt;/td&gt; &lt;td align=&quot;right&quot;&gt;  &lt;/td&gt; &lt;td align=&quot;right&quot;&gt; 1349046000.00 &lt;/td&gt; &lt;td align=&quot;right&quot;&gt;   5 &lt;/td&gt; &lt;/tr&gt;
-##   &lt;tr&gt; &lt;td align=&quot;right&quot;&gt; 3 &lt;/td&gt; &lt;td align=&quot;right&quot;&gt;  &lt;/td&gt; &lt;td align=&quot;right&quot;&gt; 1349046000.00 &lt;/td&gt; &lt;td align=&quot;right&quot;&gt;  10 &lt;/td&gt; &lt;/tr&gt;
-##   &lt;tr&gt; &lt;td align=&quot;right&quot;&gt; 4 &lt;/td&gt; &lt;td align=&quot;right&quot;&gt;  &lt;/td&gt; &lt;td align=&quot;right&quot;&gt; 1349046000.00 &lt;/td&gt; &lt;td align=&quot;right&quot;&gt;  15 &lt;/td&gt; &lt;/tr&gt;
-##   &lt;tr&gt; &lt;td align=&quot;right&quot;&gt; 5 &lt;/td&gt; &lt;td align=&quot;right&quot;&gt;  &lt;/td&gt; &lt;td align=&quot;right&quot;&gt; 1349046000.00 &lt;/td&gt; &lt;td align=&quot;right&quot;&gt;  20 &lt;/td&gt; &lt;/tr&gt;
-##   &lt;tr&gt; &lt;td align=&quot;right&quot;&gt; 6 &lt;/td&gt; &lt;td align=&quot;right&quot;&gt;  &lt;/td&gt; &lt;td align=&quot;right&quot;&gt; 1349046000.00 &lt;/td&gt; &lt;td align=&quot;right&quot;&gt;  25 &lt;/td&gt; &lt;/tr&gt;
-##    &lt;/table&gt;</code></pre>
+head(activity)</code></pre>
+<pre><code>##   steps       date interval
+## 1    NA 2012-10-01        0
+## 2    NA 2012-10-01        5
+## 3    NA 2012-10-01       10
+## 4    NA 2012-10-01       15
+## 5    NA 2012-10-01       20
+## 6    NA 2012-10-01       25</code></pre>
 </div>
 </div>
 <div id="what-is-mean-total-number-of-steps-taken-per-day" class="section level2">
