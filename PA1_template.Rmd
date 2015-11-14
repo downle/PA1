@@ -1,0 +1,178 @@
+---
+title: "Reproducible Research: Peer Assessment 1"
+output: 
+  html_document:
+    keep_md: true
+---
+
+
+## Loading and preprocessing the data
+
+### Load the CSV File and view first serveral rows 
+```{r echo=TRUE}
+activity <- read.csv("~/PA1_QIAN/activity.csv")
+```
+
+### Format date
+```{r echo=TRUE}
+activity$date<-as.POSIXct(activity$date,format="%Y-%m-%d") 
+head(activity)
+```
+
+## What is mean total number of steps taken per day?
+
+### Total steps taken per day
+```{r echo=TRUE}
+#Daily total number of steps by removing missing values
+total_daily<-aggregate(activity$steps, by=list(activity$date), FUN=sum,na.rm=TRUE) 
+#Rename columns in table
+colnames(total_daily)<-c('date','total_steps')  
+total_daily
+```
+
+### Histogram of daily total steps taken
+```{r echo=TRUE}
+library(ggplot2)
+qplot(total_daily$total_steps, geom="histogram",
+      fill=I("blue"), 
+      col=I("black"), 
+      main = "Histogram of daily total steps taken", 
+      xlab = "Daily total steps taken") 
+```
+
+
+### Mean and median of steps taken per day
+```{r echo=TRUE}
+library(doBy)
+summaryBy(steps ~ date, data = activity, 
+          FUN = list(mean,median))
+```
+
+
+## What is the average daily activity pattern?
+
+### Average number of steps taken of the 5-minute interval across all days
+```{r echo=TRUE}
+step_mean_Interval<-aggregate(formula = steps~interval, 
+           data = activity,
+           FUN = mean)
+colnames(step_mean_Interval)<-c('interval','Average_steps')
+```
+
+### Time series plot 
+```{r echo=TRUE}
+library("lattice")
+xyplot(Average_steps~interval,
+data = step_mean_Interval,
+type = "l")
+```
+
+### Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
+
+```{r echo=TRUE}
+# The 5-minute interval contains the maximum number of steps is 835
+subset(step_mean_Interval,step_mean_Interval$Average_steps==max(step_mean_Interval$Average_steps))
+```
+
+
+## Imputing missing values
+
+### Missing values
+
+#### Missing values for steps
+```{r echo=TRUE}
+table(is.na(activity$steps))
+```
+
+#### Missing values for date
+```{r echo=TRUE}
+table(is.na(activity$date))
+```
+
+#### Missing values for interval
+```{r echo=TRUE}
+table(is.na(activity$interval))
+```
+
+### Replace missing values
+#### Merge raw activity data with steps interval average data
+```{r echo=TRUE}
+steps_imputing<-merge(activity,step_mean_Interval,by="interval")
+#Rename columns in table
+colnames(steps_imputing)<-c('interval','steps_RAW','date','steps_mean')
+```
+#### Replace missing steps with average steps and view first several rows
+```{r echo=TRUE}
+#Initialise the imputing column with original data
+steps_imputing$steps_imputing<-steps_imputing$steps_RAW
+
+#Replace missing steps with average steps
+steps_imputing$steps_imputing[is.na(steps_imputing$steps_RAW)==TRUE]<-steps_imputing$steps_mean[is.na(steps_imputing$steps_RAW)==TRUE]
+
+head(steps_imputing)
+```
+
+### Create a new dataset that is equal to the original dataset but with the missing data filled in
+```{r echo=TRUE}
+activity_no_missing_data<-steps_imputing
+```
+
+### The mean and median total number of steps taken per day
+```{r echo=TRUE}
+library(doBy)
+activity_no_missing_data_Daily<-summaryBy(steps_imputing ~ date, data = activity_no_missing_data, 
+          FUN = list(sum,mean,median))
+activity_no_missing_data_Daily
+```
+
+### Histogram of the total number of steps taken each day before and after Imputing missing values
+```{r echo=TRUE}
+#Histogram of daily total steps taken after Imputing missing values
+library(ggplot2)
+qplot(activity_no_missing_data_Daily$steps_imputing.sum, geom="histogram",
+      fill=I("blue"), 
+      col=I("black"), 
+      main = "Histogram of daily total steps taken after Imputing missing values", 
+      xlab = "Daily total steps taken") 
+
+#Histogram of daily total steps taken before Imputing missing values
+library(ggplot2)
+qplot(total_daily$total_steps, geom="histogram",
+      fill=I("green"), 
+      col=I("black"), 
+      main = "Histogram of daily total steps taken before Imputing missing values", 
+      xlab = "Daily total steps taken") 
+
+
+```
+
+## Are there differences in activity patterns between weekdays and weekends?
+
+### Add weekday and weekday/weekedn flags to the data
+```{r echo=TRUE}
+activity_no_missing_data$date<-as.POSIXct(activity_no_missing_data$date,format="%Y-%m-%d")
+#Add weekday flags and view first several rows
+activity_no_missing_data$weekday<-weekdays(activity_no_missing_data$date)
+head(activity_no_missing_data)
+
+#Add weekday/weekend flags and view first several rows
+activity_no_missing_data$weekday_weekend_Flag<-"weekday"
+activity_no_missing_data$weekday_weekend_Flag[activity_no_missing_data$weekday %in% c("Saturday", "Sunday")]<-"weekend"
+head(activity_no_missing_data)
+```
+
+### 5-minute interval and the average number of steps taken, averaged across all weekday days or weekend days
+```{r echo=TRUE}
+step_mean_weekday_weekend<-aggregate(formula = steps_imputing~interval+weekday_weekend_Flag, 
+           data = activity_no_missing_data,
+           FUN = mean)
+colnames(step_mean_weekday_weekend)<-c('interval','weekday_weekend_Flag','Average_steps')
+```
+
+### Panel plot containing a time series plot for weekday and weekend
+```{r echo=TRUE}
+library("lattice")
+xyplot(Average_steps~interval|weekday_weekend_Flag,
+data = step_mean_weekday_weekend,
+type = "l")
+```
